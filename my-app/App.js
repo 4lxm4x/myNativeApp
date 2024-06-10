@@ -13,15 +13,21 @@ export default function App() {
     ]);
   }
 
+  function onDeleteItem(id) {
+    setGoalsList((goalsList) => {
+      return goalsList.filter((goal) => goal.id !== id);
+    });
+  }
+
   return (
     <View style={styles.appContainer}>
-      <GoalInput props={handleInput} />
+      <GoalInput onAddGoal={handleInput} />
       <View style={styles.goalsContainer}>
         <FlatList
           alwaysBounceVertical={false}
           data={goalsList}
           renderItem={(itemData) => {
-            return <GoalItem props={itemData.item} />;
+            return <GoalItem goal={itemData.item} onDelete={onDeleteItem} />;
           }}
           keyExtractor={(item, index) => {
             return item.id;
