@@ -1,30 +1,50 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import GoalInput from "./components/GoalInput";
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
+  const [goalsList, setGoalsList] = useState([]);
+
+  function handleInput(goal) {
+    setGoalsList((goals) => [
+      ...goals,
+      { text: goal, id: Math.random().toString() },
+    ]);
+  }
+
   return (
-    <View style={styles.container}>
-      <TextInput style={styles.textInput}></TextInput>
-      <Button title="Click"></Button>
+    <View style={styles.appContainer}>
+      <GoalInput props={handleInput} />
+      <View style={styles.goalsContainer}>
+        <FlatList
+          alwaysBounceVertical={false}
+          data={goalsList}
+          renderItem={(itemData) => {
+            return <GoalItem props={itemData.item} />;
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+        ></FlatList>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
+  appContainer: {
+    marginTop: 50,
     marginHorizontal: 20,
     backgroundColor: "#fff",
-    alignItems: "center",
 
-    justifyContent: "space-between",
-    flexDirection: "row",
-    height: "50%",
+    justifyContent: "flex-start",
+    height: "100%",
   },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: "80%",
-    placeholder: "Input something",
+
+  goalsContainer: {
+    flex: 5,
+
+    margin: 10,
   },
 });
